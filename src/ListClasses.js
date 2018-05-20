@@ -3,19 +3,66 @@ import React, {Component} from 'react'
 import {getAllClasses} from './ClassListService'
 import {Loader, Table} from "semantic-ui-react"
 
+const clubsToSearch = [
+  `FENCH`,
+  `THOM`,
+  `SPIT`,
+  `DEVON`
+]
+
+const daysToAvoid = [
+  `Sat`,
+  `Sun`
+]
+
+const classesToAvoid = [
+  `RPM`,
+  `Spin`,
+  `BODYCOMBAT`,
+  `Pilates`,
+  `SPARR`,
+  `ZUMBA`,
+  `Yoga`,
+  `Boxing`,
+  `Legs Bums & Tums`,
+  `Aqua`,
+  `Vinyasa Yoga`,
+  `Pro Cycling`
+]
+
+const earliestStartHours = 8
+const latestStartHours = 18
+
 export default class ListClasses extends Component {
   state = {}
 
   UNSAFE_componentWillMount = () => {
-    getAllClasses()
+    getAllClasses(clubsToSearch)
       .then(allClasses => {
-        const sortedClasses = [...allClasses].sort(this.sortClasses)
+        const classNames = allClasses.reduce((agg, classItem) => {
+          if (!agg.includes(classItem.Name)) agg.push(classItem.Name)
+          return agg
+        }, [])
+
+        const sortedClasses = [...allClasses]
+          .filter(classItem => !daysToAvoid.includes(classItem.FriendlyStartDateString.split(` `)[0]))
+          .filter(this.timeFilter)
+          .filter(classItem => !classesToAvoid.includes(classItem.Name))
+          .sort(this.sortClasses)
 
         this.setState({
           allClasses,
-          sortedClasses
+          sortedClasses,
+          classNames
         })
       })
+  }
+
+  timeFilter = classItem => {
+    const timeParts = classItem.FriendlyStartTimeString.split(`:`)
+    const timeInMins = parseInt(timeParts[0], 10) * 60 + parseInt(timeParts[1], 10)
+
+    return timeInMins >= earliestStartHours * 60 && timeInMins <= latestStartHours * 60
   }
 
   sortClasses = (a, b) => {
@@ -70,27 +117,5 @@ export default class ListClasses extends Component {
         </Table.Body>
       </Table>
     )
-
-    // return (
-    //   <Fragment>
-    //     <Container>
-    //       <Header as={`h1`} content={`DW Fitness First class list`} />
-    //       {Object.keys(classData).map(date => (
-    //         <Segment key={date}>
-    //           <Header as={`h2`} content={new Date(parseInt(date, 10)).toDateString()} />
-    //           <Item.Group>
-    //             {classData[date].map(classItem => (
-    //               <Item key={classItem.Id} >
-    //                 <Item.Content>
-    //                   <Item.Header>{classItem.Name} @ {classItem.FriendlyStartTimeString} - {classItem.FriendlyDurationString} - {classItem.Club.split(`London `).join(``)} - {classItem.Spaces} spaces</Item.Header>
-    //                 </Item.Content>
-    //               </Item>
-    //             ))}
-    //           </Item.Group>
-    //         </Segment>
-    //       ))}
-    //     </Container>
-    //   </Fragment>
-    // )
   }
 }

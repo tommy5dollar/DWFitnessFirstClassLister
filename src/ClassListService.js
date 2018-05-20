@@ -2,13 +2,6 @@ export const baseUrl = `https://www.dwfitnessfirst.com/`
 
 const classUrl = `${baseUrl}umbraco/surface/classessurface/getbookingclassesbydate/`
 
-const gyms = [
-  `FENCH`,
-  `THOM`,
-  `SPIT`,
-  `DEVON`
-]
-
 const corsWrap = url => `http://cors-anywhere.herokuapp.com/${url}`
 
 const getAllClassesByGym = async gymName => fetch(corsWrap(classUrl), {
@@ -19,8 +12,8 @@ const getAllClassesByGym = async gymName => fetch(corsWrap(classUrl), {
   body: `Club=${gymName}`
 })
 
-export const getAllClasses = async () => {
-  const allGymResponses = await Promise.all(gyms.map(async gym => (await getAllClassesByGym(gym)).json()))
+export const getAllClasses = async clubs => {
+  const allGymResponses = await Promise.all(clubs.map(async club => (await getAllClassesByGym(club)).json()))
 
   return allGymResponses.reduce((agg, gymData) => gymData.ClassDates.reduce((innerAgg, classDate) => [...innerAgg, ...classDate.Classes], agg), [])
 }
