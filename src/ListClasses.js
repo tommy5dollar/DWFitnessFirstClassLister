@@ -116,6 +116,8 @@ export default class ListClasses extends Component {
             <Table.HeaderCell>Duration</Table.HeaderCell>
             <Table.HeaderCell>Club</Table.HeaderCell>
             <Table.HeaderCell>Spaces</Table.HeaderCell>
+            <Table.HeaderCell>Instructor</Table.HeaderCell>
+            <Table.HeaderCell>Room</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -127,6 +129,8 @@ export default class ListClasses extends Component {
               <Table.Cell>{classItem.FriendlyDurationString}</Table.Cell>
               <Table.Cell>{classItem.Club.split(`London `).join(``)}</Table.Cell>
               <Table.Cell>{classItem.Spaces}</Table.Cell>
+              <Table.Cell>{classItem.Instructor}</Table.Cell>
+              <Table.Cell>{classItem.Room} {classItem.RoomNumber || ``}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
