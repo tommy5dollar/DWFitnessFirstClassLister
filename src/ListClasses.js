@@ -16,18 +16,31 @@ const daysToAvoid = [
 ]
 
 const classesToAvoid = [
-  `RPM`,
-  `Spin`,
-  `BODYCOMBAT`,
-  `Pilates`,
-  `SPARR`,
-  `ZUMBA`,
-  `Yoga`,
-  `Boxing`,
-  `Legs Bums & Tums`,
+  `AGT Power`,
+  `AGT Speed`,
   `Aqua`,
+  `BEAT Pro Athlete 80% HR`,
+  `BEAT Hiit Pro 90% HR`,
+  `BODYBALANCE`,
+  `BODYCOMBAT`,
+  `Bootcamp`,
+  `Boxing`,
+  `Core`,
+  `FGT Glute Gains`,
+  `Grit Cardio`,
+  `Grit Plyo`,
+  `Legs Bums & Tums`,
+  `Pilates`,
+  `Pro Cycling`,
+  `RPM`,
+  `SPARR`,
+  `Spin`,
+  `Step`,
+  `Stretch`,
+  `Swiss Ball`,
   `Vinyasa Yoga`,
-  `Pro Cycling`
+  `Yoga`,
+  `ZUMBA`
 ]
 
 const earliestStartHours = 8
@@ -43,6 +56,8 @@ export default class ListClasses extends Component {
           if (!agg.includes(classItem.Name)) agg.push(classItem.Name)
           return agg
         }, [])
+
+        console.log(classNames.sort())
 
         const sortedClasses = [...allClasses]
           .filter(classItem => !daysToAvoid.includes(classItem.FriendlyStartDateString.split(` `)[0]))
