@@ -2,7 +2,7 @@ export const baseUrl = `https://www.dwfitnessfirst.com/`
 
 const classUrl = `${baseUrl}umbraco/surface/classessurface/getbookingclassesbydate/`
 
-const corsWrap = url => `http://cors-anywhere.herokuapp.com/${url}`
+const corsWrap = url => `https://cors-anywhere.herokuapp.com/${url}`
 
 const getAllClassesByGym = async gymName => fetch(corsWrap(classUrl), {
   method: `POST`,
