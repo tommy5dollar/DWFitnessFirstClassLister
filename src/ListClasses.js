@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 
 import {getAllClasses} from './ClassListService'
-import {Loader, Table} from "semantic-ui-react"
+import {Icon, Loader, Table} from "semantic-ui-react"
+
+const memberId = `523020113`
 
 const clubsToSearch = [
   `FENCH`,
@@ -50,7 +52,7 @@ export default class ListClasses extends Component {
   state = {}
 
   UNSAFE_componentWillMount = () => {
-    getAllClasses(clubsToSearch)
+    getAllClasses(clubsToSearch, memberId)
       .then(allClasses => {
         const classNames = allClasses.reduce((agg, classItem) => {
           if (!agg.includes(classItem.Name)) agg.push(classItem.Name)
@@ -118,6 +120,7 @@ export default class ListClasses extends Component {
             <Table.HeaderCell>Spaces</Table.HeaderCell>
             <Table.HeaderCell>Instructor</Table.HeaderCell>
             <Table.HeaderCell>Room</Table.HeaderCell>
+            <Table.HeaderCell>Booked</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -131,6 +134,12 @@ export default class ListClasses extends Component {
               <Table.Cell>{classItem.Spaces}</Table.Cell>
               <Table.Cell>{classItem.Instructor}</Table.Cell>
               <Table.Cell>{classItem.Room} {classItem.RoomNumber || ``}</Table.Cell>
+              <Table.Cell>
+                <Icon
+                  name={classItem.Booked ? `check` : `close`}
+                  color={classItem.Booked ? `green` : `red`}
+                />
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
