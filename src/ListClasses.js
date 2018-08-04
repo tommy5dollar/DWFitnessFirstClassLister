@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 
 import {getAllClasses} from './ClassListService'
-import {Icon, Loader, Table} from "semantic-ui-react"
+import {Checkbox, Icon, Loader, Table} from "semantic-ui-react"
 
 const memberId = `523020113`
 
@@ -17,41 +17,47 @@ const daysToAvoid = [
   `Sun`
 ]
 
-// const classesToAvoid = [
-//   `AGT Power`,
-//   `AGT Speed`,
-//   `Aqua`,
-//   `BEAT Pro Athlete 80% HR`,
-//   `BEAT Hiit Pro 90% HR`,
-//   `BODYBALANCE`,
-//   `BODYCOMBAT`,
-//   `Bootcamp`,
-//   `Boxing`,
-//   `Core`,
-//   `FGT Glute Gains`,
-//   `Grit Cardio`,
-//   `Grit Plyo`,
-//   `Legs Bums & Tums`,
-//   `Pilates`,
-//   `Pro Cycling`,
-//   `RPM`,
-//   `SPARR`,
-//   `Spin`,
-//   `Step`,
-//   `Stretch`,
-//   `Swiss Ball`,
-//   `Vinyasa Yoga`,
-//   `Yoga`,
-//   `ZUMBA`
-// ]
-
-const classesToAvoid = []
+const classesToAvoid = [
+  `AGT Power`,
+  `AGT Speed`,
+  `Aqua`,
+  `BEAT Pro Athlete 80% HR`,
+  `BEAT Hiit Pro 90% HR`,
+  `BODYBALANCE`,
+  `BODYCOMBAT`,
+  `Bootcamp`,
+  `Boxing`,
+  `Core`,
+  `FGT Glute Gains`,
+  `Grit Cardio`,
+  `Grit Plyo`,
+  `Legs Bums & Tums`,
+  `Pilates`,
+  `Pro Cycling`,
+  `RPM`,
+  `SPARR`,
+  `Spin`,
+  `Step`,
+  `Stretch`,
+  `Swiss Ball`,
+  `Vinyasa Yoga`,
+  `Yoga`,
+  `ZUMBA`
+]
 
 const earliestStartHours = 7
 const latestStartHours = 18
 
 export default class ListClasses extends Component {
-  state = {}
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      daysToAvoid,
+      classesToAvoid,
+      showAllClasses: false
+    }
+  }
 
   UNSAFE_componentWillMount = () => {
     getAllClasses(clubsToSearch, memberId)
@@ -61,12 +67,7 @@ export default class ListClasses extends Component {
           return agg
         }, [])
 
-        console.log(classNames.sort())
-
         const sortedClasses = [...allClasses]
-          .filter(classItem => !daysToAvoid.includes(classItem.FriendlyStartDateString.split(` `)[0]))
-          .filter(this.timeFilter)
-          .filter(classItem => !classesToAvoid.includes(classItem.Name))
           .sort(this.sortClasses)
 
         this.setState({
@@ -98,7 +99,7 @@ export default class ListClasses extends Component {
   convertToTicks = dateString => parseInt(dateString.split(`/Date(`).join(``).split(`)/`).join(``), 10)
 
   render = () => {
-    const { sortedClasses } = this.state
+    const { sortedClasses, showAllClasses, classesToAvoid, daysToAvoid } = this.state
 
     if (!sortedClasses) return (
       <Loader
@@ -108,44 +109,62 @@ export default class ListClasses extends Component {
       />
     )
 
-    console.log(sortedClasses)
+    const filteredClasses = showAllClasses
+      ? sortedClasses
+      : sortedClasses
+        .filter(classItem => !daysToAvoid.includes(classItem.FriendlyStartDateString.split(` `)[0]))
+        .filter(this.timeFilter)
+        .filter(classItem => !classesToAvoid.includes(classItem.Name))
 
     return (
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Date</Table.HeaderCell>
-            <Table.HeaderCell>Time</Table.HeaderCell>
-            <Table.HeaderCell>Class</Table.HeaderCell>
-            <Table.HeaderCell>Duration</Table.HeaderCell>
-            <Table.HeaderCell>Club</Table.HeaderCell>
-            <Table.HeaderCell>Spaces</Table.HeaderCell>
-            <Table.HeaderCell>Instructor</Table.HeaderCell>
-            <Table.HeaderCell>Room</Table.HeaderCell>
-            <Table.HeaderCell>Booked</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {sortedClasses.map(classItem => (
-            <Table.Row key={classItem.Id}>
-              <Table.Cell>{classItem.FriendlyStartDateString}</Table.Cell>
-              <Table.Cell>{classItem.FriendlyStartTimeString}</Table.Cell>
-              <Table.Cell>{classItem.Name}</Table.Cell>
-              <Table.Cell>{classItem.FriendlyDurationString}</Table.Cell>
-              <Table.Cell>{classItem.Club.split(`London `).join(``)}</Table.Cell>
-              <Table.Cell>{classItem.Spaces}</Table.Cell>
-              <Table.Cell>{classItem.Instructor}</Table.Cell>
-              <Table.Cell>{classItem.Room} {classItem.RoomNumber || ``}</Table.Cell>
-              <Table.Cell>
-                <Icon
-                  name={classItem.Booked ? `check` : `close`}
-                  color={classItem.Booked ? `green` : `red`}
-                />
-              </Table.Cell>
+      <Fragment>
+        <Checkbox
+          toggle
+          name={`showAllClasses`}
+          label={`Show all classes`}
+          checked={showAllClasses}
+          onClick={this.handleToggleShowAllClasses}
+        />
+        <Table>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Date</Table.HeaderCell>
+              <Table.HeaderCell>Time</Table.HeaderCell>
+              <Table.HeaderCell>Class</Table.HeaderCell>
+              <Table.HeaderCell>Duration</Table.HeaderCell>
+              <Table.HeaderCell>Club</Table.HeaderCell>
+              <Table.HeaderCell>Spaces</Table.HeaderCell>
+              <Table.HeaderCell>Instructor</Table.HeaderCell>
+              <Table.HeaderCell>Room</Table.HeaderCell>
+              <Table.HeaderCell>Booked</Table.HeaderCell>
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+          </Table.Header>
+          <Table.Body>
+            {filteredClasses.map(classItem => (
+              <Table.Row key={classItem.Id}>
+                <Table.Cell>{classItem.FriendlyStartDateString}</Table.Cell>
+                <Table.Cell>{classItem.FriendlyStartTimeString}</Table.Cell>
+                <Table.Cell>{classItem.Name}</Table.Cell>
+                <Table.Cell>{classItem.FriendlyDurationString}</Table.Cell>
+                <Table.Cell>{classItem.Club.split(`London `).join(``)}</Table.Cell>
+                <Table.Cell>{classItem.Spaces}</Table.Cell>
+                <Table.Cell>{classItem.Instructor}</Table.Cell>
+                <Table.Cell>{classItem.Room} {classItem.RoomNumber || ``}</Table.Cell>
+                <Table.Cell>
+                  <Icon
+                    name={classItem.Booked ? `check` : `close`}
+                    color={classItem.Booked ? `green` : `red`}
+                  />
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </Fragment>
     )
   }
+
+  handleToggleShowAllClasses = (e, { name, checked }) => this.setState({
+    [name]: checked
+  })
 }
