@@ -45,7 +45,7 @@ const classesToAvoid = [
   `ZUMBA`
 ]
 
-const earliestStartHours = 7
+const earliestStartHours = 9
 const latestStartHours = 18
 
 export default class ListClasses extends Component {
