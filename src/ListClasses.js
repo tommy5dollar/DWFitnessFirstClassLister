@@ -17,35 +17,37 @@ const daysToAvoid = [
   `Sun`
 ]
 
-const classesToAvoid = [
-  `AGT Power`,
-  `AGT Speed`,
-  `Aqua`,
-  `BEAT Pro Athlete 80% HR`,
-  `BEAT Hiit Pro 90% HR`,
-  `BODYBALANCE`,
-  `BODYCOMBAT`,
-  `Bootcamp`,
-  `Boxing`,
-  `Core`,
-  `FGT Glute Gains`,
-  `Grit Cardio`,
-  `Grit Plyo`,
-  `Legs Bums & Tums`,
-  `Pilates`,
-  `Pro Cycling`,
-  `RPM`,
-  `SPARR`,
-  `Spin`,
-  `Step`,
-  `Stretch`,
-  `Swiss Ball`,
-  `Vinyasa Yoga`,
-  `Yoga`,
-  `ZUMBA`
-]
+// const classesToAvoid = [
+//   `AGT Power`,
+//   `AGT Speed`,
+//   `Aqua`,
+//   `BEAT Pro Athlete 80% HR`,
+//   `BEAT Hiit Pro 90% HR`,
+//   `BODYBALANCE`,
+//   `BODYCOMBAT`,
+//   `Bootcamp`,
+//   `Boxing`,
+//   `Core`,
+//   `FGT Glute Gains`,
+//   `Grit Cardio`,
+//   `Grit Plyo`,
+//   `Legs Bums & Tums`,
+//   `Pilates`,
+//   `Pro Cycling`,
+//   `RPM`,
+//   `SPARR`,
+//   `Spin`,
+//   `Step`,
+//   `Stretch`,
+//   `Swiss Ball`,
+//   `Vinyasa Yoga`,
+//   `Yoga`,
+//   `ZUMBA`
+// ]
 
-const earliestStartHours = 8
+const classesToAvoid = []
+
+const earliestStartHours = 7
 const latestStartHours = 18
 
 export default class ListClasses extends Component {
