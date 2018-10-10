@@ -7,9 +7,10 @@ const memberId = `523020113`
 
 const clubsToSearch = [
   `FENCH`,
-  `THOM`,
   `SPIT`,
-  `DEVON`
+  `DEVON`,
+  `LIVST`,
+  `BROAD`
 ]
 
 const daysToAvoid = [
